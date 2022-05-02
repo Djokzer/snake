@@ -35,19 +35,19 @@ pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, 
 	snake.head = snake.next;
 	if snake.head_dir == "UP"
 	{
-		snake.next = (snake.next.0, (snake.next.1 - block.1) % screen_size.1);
+		snake.next = (snake.next.0, (snake.next.1 - block.1 + screen_size.1) % screen_size.1);
 	}
 	else if snake.head_dir == "DOWN"
 	{
-		snake.next = (snake.next.0, (snake.next.1 + block.1) % screen_size.1);
+		snake.next = (snake.next.0, (snake.next.1 + block.1 + screen_size.1) % screen_size.1);
 	}
 	else if snake.head_dir == "LEFT"
 	{
-		snake.next = ((snake.next.0 - block.0) % screen_size.0, snake.next.1);
+		snake.next = ((snake.next.0 - block.0 + screen_size.0) % screen_size.0, snake.next.1);
 	}
 	else if snake.head_dir == "RIGHT"
 	{
-		snake.next = ((snake.next.0 + block.0) % screen_size.0, snake.next.1);
+		snake.next = ((snake.next.0 + block.0 + screen_size.0) % screen_size.0, snake.next.1);
 	}
 }
 

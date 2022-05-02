@@ -14,7 +14,7 @@ fn main()
 
     let lime = Color::LIME;
     let light_lime = Color{r : lime.r, g : lime.g, b : lime.b, a : lime.a-200};
-    let board = board::build_board(16, 16, Color::LIME, light_lime);
+    let board = board::build_board(16, 16, Color::LIME, light_lime, SCREEN_SIZE);
 
     let mut snake = snake::build_snake((SCREEN_SIZE.0/2, SCREEN_SIZE.1/2), &board, SCREEN_SIZE, Color::GOLD, Color::WHITE);
 
@@ -26,7 +26,7 @@ fn main()
         let mut d = rl.begin_drawing(&thread);
         d.clear_background(Color::WHITE);
 
-        board::draw_board(&mut d, &board, SCREEN_SIZE); //Draw the Game Board
+        board::draw_board(&mut d, &board, SCREEN_SIZE, block); //Draw the Game Board
         snake::draw_snake(&mut d, &mut snake, &board,SCREEN_SIZE); //Draw the Snake
 
         snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
