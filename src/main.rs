@@ -11,7 +11,9 @@ fn main()
         .title("Snake")
         .build();
 
-    let board = board::build_board(8, 8, Color::SKYBLUE, Color::LIGHTGRAY);
+    let lime = Color::LIME;
+    let light_lime = Color{r : lime.r, g : lime.g, b : lime.b, a : lime.a-200};
+    let board = board::build_board(16, 16, Color::LIME, light_lime);
 
 
     while !rl.window_should_close() 
