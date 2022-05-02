@@ -19,17 +19,16 @@ pub fn build_board(x_ : i32, y_ : i32, color_1_ : Color, color_2_ : Color) -> Bo
 	}
 }
 
-pub fn draw_board(h : &mut RaylibDrawHandle, b : &Board, size : (i32, i32))
+pub fn draw_board(h : &mut RaylibDrawHandle, b : &Board, screen_size : (i32, i32))
 {
 	let mut c : Color;
-	for x in (0..size.0).step_by((size.0/b.x) as usize)
+	for x in (0..screen_size.0).step_by((screen_size.0/b.x) as usize)
 	{
-		for y in (0..size.1).step_by((size.1/b.y) as usize)
+		for y in (0..screen_size.1).step_by((screen_size.1/b.y) as usize)
 		{
-			if ((x/(size.0/b.x)) + (y/(size.0/b.y))) % 2 == 0{c = b.color_1;}
+			if ((x/(screen_size.0/b.x)) + (y/(screen_size.0/b.y))) % 2 == 0{c = b.color_1;}
 			else{c = b.color_2;}
-			h.draw_rectangle(x, y, size.0/b.x, size.1/b.y, c);
+			h.draw_rectangle(x, y, screen_size.0/b.x, screen_size.1/b.y, c);
 		}
 	}
-	//t.draw_text("SNAKE GAME!", 12, 12, 20, b.color_1);
 }
