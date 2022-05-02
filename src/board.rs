@@ -1,13 +1,14 @@
 use raylib::prelude::*;
+use Iterator;
 
 pub struct Board{
-	pub x : u64,
-	pub y : u64,
+	pub x : i32,
+	pub y : i32,
 	pub color_1 : Color,
-	pub color_2 : Color
+	pub color_2 : Color,
 }
 
-pub fn build_board(x_ : u64, y_ : u64, color_1_ : Color, color_2_ : Color) -> Board
+pub fn build_board(x_ : i32, y_ : i32, color_1_ : Color, color_2_ : Color) -> Board
 {
 	Board
 	{
@@ -18,7 +19,17 @@ pub fn build_board(x_ : u64, y_ : u64, color_1_ : Color, color_2_ : Color) -> Bo
 	}
 }
 
-pub fn test(t : &mut RaylibDrawHandle, b : &Board)
+pub fn draw_board(h : &mut RaylibDrawHandle, b : &Board, size : (i32, i32))
 {
-	t.draw_text("SNAKE GAME!", 12, 12, 20, b.color_1);
+	let mut c : Color;
+	for x in (0..size.0).step_by(100)
+	{
+		for y in (0..size.1).step_by(100)
+		{
+			if ((x/(size.0/b.x)) + (y/(size.0/b.y))) % 2 == 0{c = b.color_1;}
+			else{c = b.color_2;}
+			h.draw_rectangle(x, y, size.0/b.x, size.1/b.y, c);
+		}
+	}
+	//t.draw_text("SNAKE GAME!", 12, 12, 20, b.color_1);
 }

@@ -4,12 +4,14 @@ mod board;
 
 fn main() 
 {
+    const SIZE: (i32, i32) = (800, 800);
+
     let (mut rl, thread) = raylib::init()
-        .size(800, 800)
+        .size(SIZE.0, SIZE.1)
         .title("Snake")
         .build();
 
-    let board = board::build_board(8, 8, Color::BLUE, Color::YELLOW);
+    let board = board::build_board(8, 8, Color::SKYBLUE, Color::LIGHTGRAY);
 
 
     while !rl.window_should_close() 
@@ -17,7 +19,6 @@ fn main()
         let mut d = rl.begin_drawing(&thread);
 
         d.clear_background(Color::WHITE);
-        //d.draw_text("SNAKE GAME!", 12, 12, 20, board.color_1);
-        board::test(&mut d, &board);
+        board::draw_board(&mut d, &board, SIZE);
     }
 }
