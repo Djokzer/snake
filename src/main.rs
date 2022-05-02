@@ -29,11 +29,11 @@ fn main()
         board::draw_board(&mut d, &board, SCREEN_SIZE); //Draw the Game Board
         snake::draw_snake(&mut d, &mut snake, &board,SCREEN_SIZE); //Draw the Snake
 
+        snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
+
         time += d.get_frame_time();
 
-        println!("{}", time);
-
-        if time >= 0.25
+        if time >= 0.2
         {
             snake::update_snake(&mut snake, block, SCREEN_SIZE);
             time = 0.0
