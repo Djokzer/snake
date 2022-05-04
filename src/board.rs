@@ -1,5 +1,6 @@
 use raylib::prelude::*;
 use Iterator;
+use crate::snake;
 
 pub struct Board{
 	pub x : i32,
@@ -35,4 +36,15 @@ pub fn draw_board(h : &mut RaylibDrawHandle, b : &Board, screen_size : (i32, i32
 	}
 	
 	h.draw_rectangle(b.fruit.0, b.fruit.1, block.0 , block.1, Color::PURPLE);
+}
+
+pub fn update_board(b : &mut Board, snake : &mut snake::Snake, screen_size : (i32, i32), block : (i32, i32))
+{
+	if snake.body[0] == b.fruit
+	{
+		let r_1 : i32 = get_random_value(0, screen_size.0 / block.0 - 1);
+		let r_2 : i32 = get_random_value(0, screen_size.1 / block.1  -1);
+		b.fruit = (r_1 * block.0 , r_2 * block.1);
+		snake::grow_snake(snake);
+	}
 }
