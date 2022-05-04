@@ -1,4 +1,5 @@
 use raylib::prelude::*;
+use raylib::consts::KeyboardKey::*;
 
 mod board;
 mod snake;
@@ -24,19 +25,23 @@ fn main()
     while !rl.window_should_close() 
     {
         let mut d = rl.begin_drawing(&thread);
-        d.clear_background(Color::WHITE);
 
-        board::draw_board(&mut d, &board, SCREEN_SIZE, block); //Draw the Game Board
-        snake::draw_snake(&mut d, &mut snake, &board,SCREEN_SIZE); //Draw the Snake
-
-        snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
-
-        time += d.get_frame_time();
-
-        if time >= 0.2
+        if !d.is_key_down(KEY_SPACE) //Press Space for pause
         {
-            snake::update_snake(&mut snake, block, SCREEN_SIZE);
-            time = 0.0
+            d.clear_background(Color::WHITE);
+
+            board::draw_board(&mut d, &board, SCREEN_SIZE, block); //Draw the Game Board
+            snake::draw_snake(&mut d, &mut snake, &board, block); //Draw the Snake
+
+            snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
+
+            time += d.get_frame_time();
+
+            if time >= 0.2
+            {
+                snake::update_snake(&mut snake, block, SCREEN_SIZE);
+                time = 0.0
+            }
         }
     }
 }

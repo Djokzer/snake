@@ -25,29 +25,62 @@ pub fn build_snake(_head : (i32, i32), board : &board::Board, screen_size : (i32
 	}
 }
 
-pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake, b : &board::Board, screen_size : (i32, i32))
+pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake, b : &board::Board, block : (i32, i32))
 {
-	h.draw_rectangle(snake.head.0, snake.head.1, screen_size.0/b.x, screen_size.1/b.y, snake.color);
+	draw_snake_head(h, snake, block);
+
+}
+
+pub fn draw_snake_head(h : &mut RaylibDrawHandle, snake : &mut Snake, block : (i32, i32))
+{
+	h.draw_rectangle(snake.head.0, snake.head.1, block.0, block.1, snake.color); //Draw head
+	
+	let eyes_pos : (i32, i32);
+	let eyes_pos_2 : (i32, i32);
+
+	match snake.head_dir.as_str()
+	{
+		"UP"=> 
+		{
+			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4)); 
+			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4));
+		},
+		"DOWN"=>
+		{
+			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4) * 3); 
+			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4) * 3);
+		},
+		"LEFT"=>
+		{
+			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4));
+			eyes_pos_2 = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4) * 3);
+		},
+		"RIGHT"=>
+		{
+			eyes_pos = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4));
+			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4) * 3);
+		},
+		_=>
+		{
+			eyes_pos = (snake.head.0 + (block.0/4), 0); 
+			eyes_pos_2 = (0,0)
+		},
+	}
+	h.draw_circle(eyes_pos.0, eyes_pos.1, 5.0, snake.eye_color);
+	h.draw_circle(eyes_pos_2.0, eyes_pos_2.1, 5.0, snake.eye_color);
 }
 
 pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, i32))
 {
 	snake.head = snake.next;
-	if snake.head_dir == "UP"
+
+	match snake.head_dir.as_str()
 	{
-		snake.next = (snake.next.0, (snake.next.1 - block.1 + screen_size.1) % screen_size.1);
-	}
-	else if snake.head_dir == "DOWN"
-	{
-		snake.next = (snake.next.0, (snake.next.1 + block.1 + screen_size.1) % screen_size.1);
-	}
-	else if snake.head_dir == "LEFT"
-	{
-		snake.next = ((snake.next.0 - block.0 + screen_size.0) % screen_size.0, snake.next.1);
-	}
-	else if snake.head_dir == "RIGHT"
-	{
-		snake.next = ((snake.next.0 + block.0 + screen_size.0) % screen_size.0, snake.next.1);
+		"UP"=>snake.next = (snake.next.0, (snake.next.1 - block.1 + screen_size.1) % screen_size.1),
+		"DOWN"=>snake.next = (snake.next.0, (snake.next.1 + block.1 + screen_size.1) % screen_size.1),
+		"LEFT"=>snake.next = ((snake.next.0 - block.0 + screen_size.0) % screen_size.0, snake.next.1),
+		"RIGHT"=>snake.next = ((snake.next.0 + block.0 + screen_size.0) % screen_size.0, snake.next.1),
+		_=> snake.next = snake.next, //Default
 	}
 }
 
