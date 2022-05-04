@@ -24,6 +24,8 @@ fn main()
 
     let mut time : f32 = 0.0;
 
+    let mut state = true; //Game state
+
     while !rl.window_should_close() 
     {
         let mut d = rl.begin_drawing(&thread);
@@ -33,17 +35,23 @@ fn main()
             d.clear_background(Color::WHITE);
 
             board::draw_board(&mut d, &board, SCREEN_SIZE, block); //Draw the Game Board
-            snake::draw_snake(&mut d, &mut snake, &board, block); //Draw the Snake
+            snake::draw_snake(&mut d, &mut snake, block); //Draw the Snake
 
             snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
 
             time += d.get_frame_time();
 
-            if time >= 0.2
+            if time >= 0.2 && state == true
             {
-                snake::update_snake(&mut snake, block, SCREEN_SIZE);
+                state = snake::update_snake(&mut snake, block, SCREEN_SIZE);
                 board::update_board(&mut board, &mut snake, SCREEN_SIZE, block);
                 time = 0.0
+            }
+            else
+            {
+                //SHow SCORE
+
+                //Check if player want to replay
             }
         }
     }

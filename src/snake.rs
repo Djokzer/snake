@@ -31,7 +31,7 @@ pub fn init_snake(snake : &mut Snake, pos_init : (i32, i32),board : &board::Boar
 	snake.next = (snake.body[0].0, snake.body[0].1 + (screen_size.1 / board.x));
 }
 
-pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake, b : &board::Board, block : (i32, i32))
+pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake,block : (i32, i32))
 {
 	draw_snake_head(h, snake, block);
 
@@ -48,12 +48,12 @@ pub fn draw_snake_head(h : &mut RaylibDrawHandle, snake : &mut Snake, block : (i
 	h.draw_circle(snake.snake_eyes.1.0, snake.snake_eyes.1.1, 5.0,snake.eye_color);
 }
 
-pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, i32))
+pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, i32)) ->bool
 {
 	let snake_len = snake.body.len();
 	let mut i = snake_len - 1;
 
-	while(i > 0)
+	while i > 0
 	{
 		snake.body[i] = snake.body[i-1];
 		i-=1;
@@ -89,6 +89,8 @@ pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, 
 		},
 		_=> snake.next = snake.next, //Default
 	}
+
+	return true;
 }
 
 pub fn move_snake_dir(h : &mut RaylibDrawHandle, snake : &mut Snake)
