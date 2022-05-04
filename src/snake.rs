@@ -10,6 +10,7 @@ pub struct Snake
 	pub head_dir : String,
 	pub color : Color,
 	pub eye_color : Color,
+	pub snake_eyes : ((i32, i32), (i32, i32)),
 }
 
 pub fn build_snake(_head : (i32, i32), board : &board::Board, screen_size : (i32, i32), _color : Color, _eye_color : Color) -> Snake
@@ -21,6 +22,7 @@ pub fn build_snake(_head : (i32, i32), board : &board::Board, screen_size : (i32
 		body : vec![],
 		head_dir : "DOWN".to_string(),
 		color : _color,
+		snake_eyes : ((0, 0), (0, 0)),
 		eye_color : _eye_color,
 	}
 }
@@ -34,40 +36,8 @@ pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake, b : &board::Boa
 pub fn draw_snake_head(h : &mut RaylibDrawHandle, snake : &mut Snake, block : (i32, i32))
 {
 	h.draw_rectangle(snake.head.0, snake.head.1, block.0, block.1, snake.color); //Draw head
-	
-	let eyes_pos : (i32, i32);
-	let eyes_pos_2 : (i32, i32);
-
-	match snake.head_dir.as_str()
-	{
-		"UP"=> 
-		{
-			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4)); 
-			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4));
-		},
-		"DOWN"=>
-		{
-			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4) * 3); 
-			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4) * 3);
-		},
-		"LEFT"=>
-		{
-			eyes_pos = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4));
-			eyes_pos_2 = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4) * 3);
-		},
-		"RIGHT"=>
-		{
-			eyes_pos = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4));
-			eyes_pos_2 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4) * 3);
-		},
-		_=>
-		{
-			eyes_pos = (snake.head.0 + (block.0/4), 0); 
-			eyes_pos_2 = (0,0)
-		},
-	}
-	h.draw_circle(eyes_pos.0, eyes_pos.1, 5.0, snake.eye_color);
-	h.draw_circle(eyes_pos_2.0, eyes_pos_2.1, 5.0, snake.eye_color);
+	h.draw_circle(snake.snake_eyes.0.0, snake.snake_eyes.0.1, 5.0,snake.eye_color); //Draw Eyes
+	h.draw_circle(snake.snake_eyes.1.0, snake.snake_eyes.1.1, 5.0,snake.eye_color);
 }
 
 pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, i32))
@@ -76,10 +46,30 @@ pub fn update_snake(snake : &mut Snake, block : (i32, i32), screen_size : (i32, 
 
 	match snake.head_dir.as_str()
 	{
-		"UP"=>snake.next = (snake.next.0, (snake.next.1 - block.1 + screen_size.1) % screen_size.1),
-		"DOWN"=>snake.next = (snake.next.0, (snake.next.1 + block.1 + screen_size.1) % screen_size.1),
-		"LEFT"=>snake.next = ((snake.next.0 - block.0 + screen_size.0) % screen_size.0, snake.next.1),
-		"RIGHT"=>snake.next = ((snake.next.0 + block.0 + screen_size.0) % screen_size.0, snake.next.1),
+		"UP"=>
+		{
+			snake.next = (snake.next.0, (snake.next.1 - block.1 + screen_size.1) % screen_size.1);
+			snake.snake_eyes.0 = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4));
+			snake.snake_eyes.1 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4));
+		}
+		"DOWN"=>
+		{
+			snake.next = (snake.next.0, (snake.next.1 + block.1 + screen_size.1) % screen_size.1);
+			snake.snake_eyes.0 = (snake.head.0 + (block.0/4), snake.head.1 + (block.0/4) * 3); 
+			snake.snake_eyes.1 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.0/4) * 3);
+		}
+		"LEFT"=>
+		{
+			snake.next = ((snake.next.0 - block.0 + screen_size.0) % screen_size.0, snake.next.1);
+			snake.snake_eyes.0 = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4));
+			snake.snake_eyes.1 = (snake.head.0 + (block.0/4), snake.head.1 + (block.1/4) * 3);
+		}
+		"RIGHT"=>
+		{
+			snake.next = ((snake.next.0 + block.0 + screen_size.0) % screen_size.0, snake.next.1);
+			snake.snake_eyes.0 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4));
+			snake.snake_eyes.1 = (snake.head.0 + (block.0/4) * 3, snake.head.1 + (block.1/4) * 3);
+		},
 		_=> snake.next = snake.next, //Default
 	}
 }
