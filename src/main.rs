@@ -1,5 +1,6 @@
 use raylib::prelude::*;
 use raylib::consts::KeyboardKey::*;
+use raylib::core::text::*;
 
 mod board;
 mod snake;
@@ -38,20 +39,26 @@ fn main()
             snake::draw_snake(&mut d, &mut snake, block); //Draw the Snake
 
             snake::move_snake_dir(&mut d, &mut snake); //Get Input and change dir
-
+            
             time += d.get_frame_time();
-
+            
             if time >= 0.2 && state == true
             {
                 state = snake::update_snake(&mut snake, block, SCREEN_SIZE);
                 board::update_board(&mut board, &mut snake, SCREEN_SIZE, block);
                 time = 0.0
             }
-            else
+            else if state == false
             {
                 //SHow SCORE
+                let mut score : String = "SCORE : ".to_string();
+                score.push_str(&snake.body.len().to_string());
+                let text_width : i32 = measure_text(&score, 40);
 
+                d.draw_text(&score, SCREEN_SIZE.0/2 - (text_width/2), SCREEN_SIZE.1 / 2 - 20, 40,Color::BLACK);
+                
                 //Check if player want to replay
+                
             }
         }
     }
