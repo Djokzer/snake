@@ -33,6 +33,13 @@ pub fn init_snake(snake : &mut Snake, pos_init : (i32, i32),board : &board::Boar
 	snake.next = (snake.body[0].0, snake.body[0].1 + (screen_size.1 / board.x));
 }
 
+pub fn create_snake(pos_init : (i32, i32), color : Color, eye_color : Color, board : &board::Board, screen_size : (i32, i32)) -> Snake
+{
+	let mut snake = build_snake(color, eye_color);
+	init_snake(&mut snake, pos_init, board, screen_size);
+	return snake;
+}
+
 pub fn draw_snake(h : &mut RaylibDrawHandle, snake : &mut Snake,block : (i32, i32))
 {
 	draw_snake_head(h, snake, block);

@@ -1,6 +1,5 @@
 use raylib::prelude::*;
 use raylib::consts::KeyboardKey::*;
-use raylib::core::text::*;
 
 mod board;
 mod snake;
@@ -18,8 +17,7 @@ fn main()
     let light_lime = Color{r : lime.r, g : lime.g, b : lime.b, a : lime.a-200};
     let mut board = board::build_board(16, 16, Color::LIME, light_lime, SCREEN_SIZE);
 
-    let mut snake = snake::build_snake(Color::GOLD, Color::WHITE); //Create the snake
-    snake::init_snake(&mut snake, (SCREEN_SIZE.0/2, SCREEN_SIZE.1/2), &board, SCREEN_SIZE); //Init the snake
+    let mut snake = snake::create_snake((SCREEN_SIZE.0/2, SCREEN_SIZE.1/2), Color::GOLD, Color::WHITE, &board, SCREEN_SIZE);
 
     let block : (i32, i32) = (SCREEN_SIZE.0/board.x, SCREEN_SIZE.1/board.y);
 
@@ -58,7 +56,12 @@ fn main()
                 d.draw_text(&score, SCREEN_SIZE.0/2 - (text_width/2), SCREEN_SIZE.1 / 2 - 20, 40,Color::BLACK);
                 
                 //Check if player want to replay
-                
+                if d.is_key_pressed(KEY_ENTER)
+                {
+                    snake = snake::create_snake((SCREEN_SIZE.0/2, SCREEN_SIZE.1/2), Color::GOLD, Color::WHITE, &board, SCREEN_SIZE); //New snake
+                    state = true;
+                    snake.snake_updated = true;
+                }
             }
         }
     }
